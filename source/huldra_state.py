@@ -7,7 +7,7 @@ Provides:
 - State directory management (never inside ops/hermes/)
 - Clean read/write with corruption recovery
 
-State directory defaults to E:/Huldra/state/ (outside ops/hermes/).
+State directory defaults to ``$HULDRA_HOME/state/`` (outside code tree, outside live Hermes)
 """
 from __future__ import annotations
 
@@ -21,14 +21,17 @@ from typing import Any, Optional
 logger = logging.getLogger(__name__)
 
 # Default state directory — outside code tree, outside live Hermes
-DEFAULT_STATE_DIR = Path("E:/Huldra/state")
+DEFAULT_STATE_DIR = Path(
+    os.environ.get("HULDRA_STATE_DIR")
+    or (Path(os.environ.get("HULDRA_HOME") or Path.cwd()) / "state")
+)
 
 
 class StateStore:
     """JSON-backed durable state stored outside the code tree.
 
     Usage:
-        store = StateStore()  # uses E:/Huldra/state/
+        store = StateStore()  # uses HULDRA_STATE_DIR or HULDRA_HOME/state/
         store.set("session.active_id", "abc-123")
         active = store.get("session.active_id")
     """

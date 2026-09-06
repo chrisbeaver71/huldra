@@ -3,7 +3,7 @@
 .SYNOPSIS
   Launch Huldra Hermes against prep-home for smoke (never live HERMES_HOME).
 .DESCRIPTION
-  Sets HERMES_HOME to %HULDRA_HOME%\huldra-hermes-prep-home and runs gateway from ops source.
+  Sets HERMES_HOME to $env:HULDRA_HOME\huldra-hermes-prep-home and runs gateway from ops source.
   Refuses if HERMES_HOME would be the live LocalAppData hermes tree.
   Set $env:HULDRA_HOME or pass explicit paths.
 #>
@@ -45,6 +45,7 @@ if (-not $Python) {
 }
 
 $env:HERMES_HOME = $prepFull
+$env:HULDRA_HOME = [IO.Path]::GetFullPath($HuldraHome)
 $env:HULDRA_ROOT = $HuldraHome
 # Do not inherit live profiles/latch
 Remove-Item Env:HERMES_PROFILE -ErrorAction SilentlyContinue

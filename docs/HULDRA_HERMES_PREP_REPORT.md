@@ -14,7 +14,7 @@ Generated: 2026-09-05 23:14:23 PT
 | Live process | `hermes.exe gateway run` from `...\hermes-agent\venv\Scripts\hermes.exe` (PID 11484 + python wrappers) |
 | HERMES_HOME | `<LIVE_HERMES_HOME>` |
 | Live config cwd | `terminal.cwd: <LEGACY_WORKSPACE>` in live `config.yaml` |
-| Huldra status mirror | `E:\Huldra\.hermes-live` (HermesLiveStatus.txt present) |
+| Huldra status mirror | `<HULDRA_HOME>\.hermes-live` (HermesLiveStatus.txt present) |
 | Channels | `#huldra`/`C0BKR5LEYV8`, `#latch`/`C0BKT3BEP4H` both in `channel_directory.json` |
 
 **Evidence notes:** Git HEAD/remote/branch verified before fork. Editable install confirmed via `pyproject.toml` name/version. Gateway command line matched confirmed identity. Live config cwd matched LATCH workspace. No remote NousResearch clone performed.
@@ -23,14 +23,14 @@ Generated: 2026-09-05 23:14:23 PT
 
 | Item | Path |
 |---|---|
-| Worktree | `E:\Huldra\huldra-hermes-prep` |
+| Worktree | `<HULDRA_HOME>\huldra-hermes-prep` |
 | Branch | `huldra-hermes-prep` (from HEAD `3a980a431b`) |
-| Prep home (isolated) | `E:\Huldra\huldra-hermes-prep-home\` |
+| Prep home (isolated) | `<HULDRA_HOME>\huldra-hermes-prep-home\` |
 | Live worktree | unchanged on `main` @ same commit |
 
 Git worktree list:
 - `<LIVE_HERMES_INSTALL>` -> `main` @ `3a980a431b`
-- `E:/Huldra/huldra-hermes-prep` -> `huldra-hermes-prep` @ tip below
+- `<HULDRA_HOME>/huldra-hermes-prep` -> `huldra-hermes-prep` @ tip below
 
 ## 3) Concise architecture map (KEEP core)
 
@@ -50,7 +50,7 @@ Huldra prep adds **guards + docs + sanitized prep-home config** without wiring i
 Documented in `LATCH_BAGGAGE_QUARANTINE.md` and classified in `HULDRA_FORK_AUDIT.md`.
 
 Removed from prep defaults:
-- `terminal.cwd` no longer LATCH path (prep-home -> `E:/Huldra`)
+- `terminal.cwd` no longer LATCH path (prep-home -> `<HULDRA_HOME>`)
 - smart_policy rewritten away from "Project LATCH / Mighty"
 - `#latch` / LATCH roots rejected by `huldra_routing` helpers
 
@@ -65,13 +65,13 @@ Quarantined (not carried into prep-home activation):
 |---|---|
 | `huldra_prep/huldra_routing.py` (+ top-level `huldra_routing.py` shim) | Path/channel guards |
 | `huldra_prep/config.example.yaml` | Secret-free Huldra defaults |
-| `E:\Huldra\huldra-hermes-prep-home\config.yaml` | Sanitized live-derived config (secrets -> placeholders; cwd Huldra) |
+| `<HULDRA_HOME>\huldra-hermes-prep-home\config.yaml` | Sanitized live-derived config (secrets -> placeholders; cwd Huldra) |
 | `HERMES_HULDRA.md` | Operating stub |
 | `LATCH_BAGGAGE_QUARANTINE.md` | Explicit non-carry list |
 | `HULDRA_FORK_AUDIT.md` | KEEP / HULDRA-ADAPT / REMOVE-LATCH / UNKNOWN |
 | `tests/test_huldra_routing_guards.py` | Guard tests |
 
-Authority note: Ansel -> Hermes execution; Chris for irreversible actions. Results/docs/live-status conventions point at `E:/Huldra/Results`, `E:/Huldra/docs`, `E:/Huldra/.hermes-live`.
+Authority note: Ansel -> Hermes execution; Chris for irreversible actions. Results/docs/live-status conventions point at `<HULDRA_HOME>/Results`, `<HULDRA_HOME>/docs`, `<HULDRA_HOME>/.hermes-live`.
 
 ## 6) Tests / checks run and results
 
@@ -79,7 +79,7 @@ Authority note: Ansel -> Hermes execution; Chris for irreversible actions. Resul
 |---|---|
 | `pytest tests/test_huldra_routing_guards.py -q` via live venv Python + `PYTHONPATH=worktree` | **7 passed** |
 | `python -c "import huldra_routing"` | **ok** |
-| PyYAML parse prep-home `config.yaml` + example | **ok** (`cwd=E:/Huldra`) |
+| PyYAML parse prep-home `config.yaml` + example | **ok** (`cwd=<HULDRA_HOME>`) |
 | Live gateway start | **NOT run** (by design) |
 | Permanent install into live venv | **NOT done** |
 
@@ -121,4 +121,4 @@ Confirmed after prep commits:
 - Live `git status` shows only pre-existing unrelated untracked odd filename — **no prep files**
 - `hermes.exe gateway run` still from original venv path (PID 11484)
 - Live `config.yaml` `cwd` still `<LEGACY_WORKSPACE>` (unchanged)
-- `E:\Huldra\docs\OBJECTIVE.md` present; LastWriteTime `2026-09-02 22:26:33` local (not modified by this work)
+- `<HULDRA_HOME>\docs\OBJECTIVE.md` present; LastWriteTime `2026-09-02 22:26:33` local (not modified by this work)

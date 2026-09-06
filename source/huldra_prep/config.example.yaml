@@ -4,7 +4,7 @@
 
 terminal:
   backend: local
-  cwd: E:/Huldra
+  cwd: "%HULDRA_HOME%"
   timeout: 180
   persistent_shell: true
 
@@ -18,8 +18,8 @@ approvals:
     be undone. Ansel (ChatGPT) sets scientific/product intent; Hermes executes
     within Huldra boundaries under Chris approval for irreversible actions.
 
-    APPROVE freely: reading under E:/Huldra, analysis scripts, creating NEW
-    files under E:/Huldra/Results, E:/Huldra/docs, E:/Huldra/evidence.
+    APPROVE freely: reading under %HULDRA_HOME%, analysis scripts, creating NEW
+    files under %HULDRA_HOME%/Results, %HULDRA_HOME%/docs, %HULDRA_HOME%/evidence.
 
     ESCALATE: money/compute spend, GPU model loads unless Chris authorized,
     publishing/deploying, rewriting git history, deleting evidence, touching
@@ -35,18 +35,18 @@ kanban:
   failure_limit: 2
 
 # Conventions
-# - Results/evidence: E:/Huldra/Results
-# - Docs/objective: E:/Huldra/docs (OBJECTIVE.md is Chris-owned; do not mutate)
-# - Live status mirror: E:/Huldra/.hermes-live
-# - Prep home (isolated): E:/Huldra/huldra-hermes-prep-home
-# - Prep code worktree: E:/Huldra/huldra-hermes-prep
+# - Results/evidence: %HULDRA_HOME%/Results
+# - Docs/objective: %HULDRA_HOME%/docs (OBJECTIVE.md is Chris-owned; do not mutate)
+# - Live status mirror: %HULDRA_HOME%/.hermes-live
+# - Prep home (isolated): %HULDRA_HOME%/huldra-hermes-prep-home
+# - Prep code worktree: %HULDRA_HOME%/huldra-hermes-prep
 
 huldra:
-  root: E:/Huldra
+  root: "%HULDRA_HOME%"
   coordination_channel: "#huldra"
   coordination_channel_id: C0BKR5LEYV8
-  results_dir: E:/Huldra/Results
-  docs_dir: E:/Huldra/docs
-  live_status_dir: E:/Huldra/.hermes-live
+  results_dir: "%HULDRA_HOME%/Results"
+  docs_dir: "%HULDRA_HOME%/docs"
+  live_status_dir: "%HULDRA_HOME%/.hermes-live"
   authority: "Ansel sets intent; Hermes executes; Chris approves irreversible actions"
   quarantine_latch: true

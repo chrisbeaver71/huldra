@@ -5,10 +5,22 @@ channel so a future Huldra cutover cannot silently inherit LATCH defaults.
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Union
 
-HULDRA_ROOT = Path(r"E:\Huldra")
+def _discover_huldra_root() -> Path:
+    configured = os.environ.get("HULDRA_HOME")
+    if configured:
+        return Path(configured)
+    here = Path(__file__).resolve()
+    for parent in (here, *here.parents):
+        if (parent / "ops" / "hermes").is_dir():
+            return parent
+    return Path.cwd()
+
+
+HULDRA_ROOT = _discover_huldra_root()
 
 ALLOWED_ROOTS = (
     HULDRA_ROOT,
@@ -73,19 +85,20 @@ def is_latch_path(path: PathLike) -> bool:
 
 
 def is_huldra_path(path: PathLike) -> bool:
-    """Return True if path is under E:\\Huldra and not a LATCH root."""
+    """Return True if path is under ``HULDRA_HOME`` and not a LATCH root."""
     if is_latch_path(path):
         return False
     try:
         p = _norm_path(path)
     except Exception:
         raw = str(path).replace("/", "\\").lower()
-        return raw.startswith(r"e:\huldra")
+        huldra = str(HULDRA_ROOT.resolve(strict=False)).replace("/", "\\").lower()
+        return raw.startswith(huldra.rstrip("\\") + "\\")
     raw = str(p).replace("/", "\\").lower()
     huldra = str(HULDRA_ROOT.resolve(strict=False)).replace("/", "\\").lower()
     if raw == huldra or raw.startswith(huldra.rstrip("\\") + "\\"):
         return True
-    return str(path).replace("/", "\\").lower().startswith(r"e:\huldra")
+    return str(path).replace("/", "\\").lower().startswith(huldra.rstrip("\\") + "\\")
 
 
 def is_latch_channel(channel_id_or_name: str) -> bool:
@@ -100,20 +113,20 @@ def is_huldra_channel(channel_id_or_name: str) -> bool:
 
 
 def assert_huldra_path(path: PathLike) -> Path:
-    """Allow only paths under E:\\Huldra; reject LATCH roots with a clear error."""
+    """Allow only paths under ``HULDRA_HOME``; reject LATCH roots clearly."""
     if is_latch_path(path):
         raise PermissionError(
             f"LATCH path forbidden for Huldra Hermes: {path!s}. "
             f"Huldra product defaults use paths under {HULDRA_ROOT} only "
             f"(not Project LATCH / profiles/latch). "
-            f"Fix cwd or config to E:\\Huldra."
+            f"Fix cwd or config to HULDRA_HOME."
         )
     p = _norm_path(path)
     if is_huldra_path(path):
         return p
     raise PermissionError(
         f"Path not under Huldra root {HULDRA_ROOT}: {path!s}. "
-        f"Expected E:\\Huldra\\... (boards under E:\\Huldra\\boards\\huldra)."
+        f"Expected HULDRA_HOME\\... (boards under HULDRA_HOME\\boards\\huldra)."
     )
 
 

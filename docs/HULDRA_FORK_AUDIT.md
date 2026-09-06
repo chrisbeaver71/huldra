@@ -27,11 +27,11 @@ the word "latch" are unrelated state-machine latches).
 
 | Item | Live evidence | Adaptation |
 |---|---|---|
-| `terminal.cwd` | `<LEGACY_WORKSPACE>` in live `config.yaml` | → `E:/Huldra` in prep-home + example |
+| `terminal.cwd` | `<LEGACY_WORKSPACE>` in live `config.yaml` | → `<HULDRA_HOME>` in prep-home + example |
 | Slack coordination | `#huldra` `C0BKR5LEYV8` exists; `#latch` `C0BKT3BEP4H` also present | Prefer `#huldra` only; guard in `huldra_routing.py` |
 | `approvals.smart_policy` | Begins "Project LATCH / Mighty…" | Rewrite for Project HULDRA + Ansel→Hermes |
 | Profiles | live `profiles\latch`, `shun*` etc. | Do not activate under prep-home; document quarantine |
-| Status mirror | `E:\Huldra\.hermes-live` already used | Codify as Huldra convention |
+| Status mirror | `<HULDRA_HOME>\.hermes-live` already used | Codify as Huldra convention |
 | Authority | Live SOUL is "Shan" personal assistant | Huldra stub uses Ansel→Hermes→Chris |
 
 ## REMOVE-LATCH / quarantine — Do not carry forward

@@ -72,7 +72,10 @@ class StatusTracker:
     """
 
     def __init__(self, status_dir: Optional[Path] = None):
-        self._status_dir = status_dir or Path("E:/Huldra/.hermes-live")
+        self._status_dir = status_dir or Path(
+            os.environ.get("HULDRA_STATUS_DIR")
+            or (Path(os.environ.get("HULDRA_HOME") or Path.cwd()) / ".hermes-live")
+        )
         self._status_dir.mkdir(parents=True, exist_ok=True)
         self._components: dict[str, ComponentReport] = {}
         self._tool_calls: list[ToolCallRecord] = []

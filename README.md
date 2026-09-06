@@ -14,7 +14,7 @@ A self-contained, isolated fork of [Hermes Agent](https://github.com/NousResearc
 
 - The live Hermes process (that remains at `$env:LOCALAPPDATA\hermes`)
 - A LATCH workspace (LATCH baggage is quarantined -- see `docs/LATCH_BAGGAGE_QUARANTINE.md`)
-- A public GitHub repository (publication is a separate step)
+- A live deployment (the public source repository is separate from local runtime state)
 
 ## Directory layout
 
@@ -24,7 +24,7 @@ $env:HULDRA_HOME\ops\hermes\
   LICENSE / ATTRIBUTION.md
   source\                 <- forked/adapted Hermes implementation (+ huldra_prep)
   config\                 <- Huldra secret-free overlays (.env.huldra.example, huldra.overlay.yaml)
-  scripts\                <- bootstrap-huldra / launch-huldra / huldra-doctor / smoke-huldra + upstream
+  scripts\                <- bootstrap-huldra / launch-huldra / huldra-doctor / smoke-huldra / huldra-pointer + upstream
   tests\                  <- Huldra routing + V1 smoke + upstream suite
   docs\                   <- OPERATOR.md, architecture, rollback, baggage audit
 ```
@@ -32,13 +32,16 @@ $env:HULDRA_HOME\ops\hermes\
 ## Quick start (Windows) -- Huldra product path
 
 ```powershell
-$env:HULDRA_HOME = 'E:\Huldra'   # or wherever you installed
+$env:HULDRA_HOME = '<install-root>'   # replace with your local Huldra root
 Set-Location "$env:HULDRA_HOME\ops\hermes"
 .\scripts\bootstrap-huldra.ps1   # layout + prep-home seed (never live HERMES_HOME)
 .\scripts\huldra-doctor.ps1      # zero-GPU path/config/routing checks
 .\scripts\smoke-huldra.ps1       # one-command smoke (pytest + YAML + layout)
 # Optional smoke launch (prep-home only):
 .\scripts\launch-huldra.ps1
+# Reversible local pointer activation (does not mutate live Hermes):
+.\scripts\huldra-pointer.ps1 -Action activate -HuldraHome $env:HULDRA_HOME -PrepHome "$env:HULDRA_HOME\huldra-hermes-prep-home"
+.\scripts\huldra-pointer.ps1 -Action rollback -HuldraHome $env:HULDRA_HOME
 ```
 
 See `docs/OPERATOR.md` for the one-pager.

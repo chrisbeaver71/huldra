@@ -10,7 +10,7 @@
 ## Prerequisites
 
 - The original live Hermes process at `$env:LOCALAPPDATA\hermes` is still intact
-- No irreversible changes have been made (no public push, no profile migration)
+- Runtime rollback does not require undoing a public source push or rewriting repository history.
 
 ## Rollback steps
 
@@ -24,6 +24,12 @@ Get-Process -Name python | Where-Object { $_.CommandLine -match "hermes" } | Sto
 Or use the task manager to find and stop the process.
 
 ### 2. Resume the original live Hermes
+
+If the reversible Huldra pointer is active, restore it first (this changes only the Huldra-owned pointer file):
+
+```powershell
+.\scripts\huldra-pointer.ps1 -Action rollback -HuldraHome $env:HULDRA_HOME
+```
 
 ```powershell
 Set-Location <LIVE_HERMES_INSTALL>
@@ -68,4 +74,4 @@ Do NOT delete `$env:HULDRA_HOME\ops\hermes`, `$env:HULDRA_HOME\boards\huldra`, o
 - The Huldra V1 code tree remains available for future attempts
 - The prep fork at `$env:HULDRA_HOME\huldra-hermes-prep` is still on branch `huldra-hermes-prep`
 - The routing guards in `huldra_routing.py` can be re-evaluated
-- No public repository exists yet -- no public rollback needed
+- The public source repository is not part of runtime rollback; do not delete or rewrite it.

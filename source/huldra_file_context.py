@@ -34,10 +34,10 @@ class PathGuard:
 
     Usage:
         guard = PathGuard(
-            allowed_roots=["E:/Huldra", "E:/Huldra/boards/huldra"],
+            allowed_roots=["<HULDRA_HOME>", "<HULDRA_HOME>/boards/huldra"],
             denied_patterns=["*.env", "*.db", "*.sqlite"],
         )
-        guard.validate("E:/Huldra/ops/hermes/backend.py")  # OK
+        guard.validate("<HULDRA_HOME>/ops/hermes/backend.py")  # OK
         guard.validate("C:/Users/generic/.env")  # FileAccessError
     """
 
@@ -45,9 +45,10 @@ class PathGuard:
         self,
         allowed_roots: Optional[list[str]] = None,
         denied_patterns: Optional[list[str]] = None,
-        huldra_root: str = "E:/Huldra",
+        huldra_root: Optional[str] = None,
     ):
-        self._huldra_root = Path(huldra_root)
+        configured_root = huldra_root or os.environ.get("HULDRA_HOME") or str(Path.cwd())
+        self._huldra_root = Path(configured_root)
         self._allowed_roots: list[Path] = []
         self._denied_patterns: list[str] = denied_patterns or [
             "*.env",

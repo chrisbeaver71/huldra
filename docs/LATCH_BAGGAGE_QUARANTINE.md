@@ -29,10 +29,10 @@ and must **not** become Huldra defaults.
 
 | LATCH default | Huldra prep default |
 |---|---|
-| `<LEGACY_WORKSPACE>` | `E:/Huldra` |
+| `<LEGACY_WORKSPACE>` | `<HULDRA_HOME>` |
 | `#latch` / `C0BKT3BEP4H` | `#huldra` / `C0BKR5LEYV8` |
 | LATCH/Mighty smart_policy | Huldra smart_policy + Ansel→Hermes authority |
-| LATCH evidence/ledger paths | `E:/Huldra/Results`, `E:/Huldra/evidence`, status via `E:/Huldra/.hermes-live` |
+| LATCH evidence/ledger paths | `<HULDRA_HOME>/Results`, `<HULDRA_HOME>/evidence`, status via `<HULDRA_HOME>/.hermes-live` |
 
 ## Explicit non-goals of this prep
 

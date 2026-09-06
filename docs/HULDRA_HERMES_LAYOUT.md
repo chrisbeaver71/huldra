@@ -8,13 +8,13 @@ Generated: 2026-09-05 ~23:16 PT (from #huldra latch request).
 - Fork stays isolated / non-destructive.
 - Live Hermes remains authoritative until an explicit Chris-approved cutover.
 - No auto-merge, deployment, cutover, or mutation of canonical live Hermes.
-- Do **not** mutate Chris-owned `E:\Huldra\docs\OBJECTIVE.md`.
+- Do **not** mutate Chris-owned `<HULDRA_HOME>\docs\OBJECTIVE.md`.
 - Do **not** blindly copy the old LATCH Hermes tree into `ops\hermes`.
 
 ## 1) Proposed permanent directory tree
 
 ```
-E:\Huldra\
+<HULDRA_HOME>\
   ops\
     hermes\                          # permanent Huldra Hermes *code* home
       README.md                      # what this instance is vs legacy LATCH
@@ -34,16 +34,16 @@ E:\Huldra\
 
 | Requested | Decision | Why |
 |---|---|---|
-| `E:\Huldra\ops\hermes\` code home | **ACCEPT** as permanent target | Clear separation; scaffold created empty (no blind LATCH copy) |
-| `E:\Huldra.hermes-live\` | **KEEP better equivalent** `E:\Huldra\.hermes-live\` | Already the live status SoT used by prep + operator mirror |
-| `E:\Huldra\boards\huldra\` state | **ACCEPT** as *future* state home | Scaffolded empty; live state still under AppData `HERMES_HOME` |
-| `E:\Huldra\Results\`, `E:\Huldra\docs\` | **KEEP** | Already outside code tree |
+| `<HULDRA_HOME>\ops\hermes\` code home | **ACCEPT** as permanent target | Clear separation; scaffold created empty (no blind LATCH copy) |
+| `<HULDRA_HOME>.hermes-live\` | **KEEP better equivalent** `<HULDRA_HOME>\.hermes-live\` | Already the live status SoT used by prep + operator mirror |
+| `<HULDRA_HOME>\boards\huldra\` state | **ACCEPT** as *future* state home | Scaffolded empty; live state still under AppData `HERMES_HOME` |
+| `<HULDRA_HOME>\Results\`, `<HULDRA_HOME>\docs\` | **KEEP** | Already outside code tree |
 
 Staging (current, still valid until migration completes):
 
 ```
-E:\Huldra\huldra-hermes-prep\          # git worktree / branch huldra-hermes-prep (staging source)
-E:\Huldra\huldra-hermes-prep-home\     # isolated HERMES_HOME for offline/smoke only
+<HULDRA_HOME>\huldra-hermes-prep\          # git worktree / branch huldra-hermes-prep (staging source)
+<HULDRA_HOME>\huldra-hermes-prep-home\     # isolated HERMES_HOME for offline/smoke only
 ```
 
 ## 2) Source-of-truth locations found (classified)
@@ -53,13 +53,13 @@ E:\Huldra\huldra-hermes-prep-home\     # isolated HERMES_HOME for offline/smoke 
 | **Live Hermes code (authoritative)** | `<LIVE_HERMES_INSTALL>` @ `3a980a431b28633a5b79c462f654dc100dc1c598` (`main`, hermes-agent 0.21.0) | LIVE SoT — do not mutate |
 | **Live HERMES_HOME** | `<LIVE_HERMES_HOME>` | LIVE overlays/config/state — do not mutate |
 | **Live process** | `hermes.exe gateway run` from live venv under that tree | LIVE — leave running |
-| **Huldra prep worktree (staging)** | `E:\Huldra\huldra-hermes-prep` branch `huldra-hermes-prep` tip `84a810b0c315ef9d9c81e0b70b79b7617838b79d` | FORK staging (reusable core + Huldra guards/docs) |
-| **Prep home (isolated)** | `E:\Huldra\huldra-hermes-prep-home\` | Sanitized config only; no real `.env` |
-| **Status mirror** | `E:\Huldra\.hermes-live\` | Huldra convention already in use |
-| **Results / docs** | `E:\Huldra\Results\`, `E:\Huldra\docs\` | Outside code tree (correct) |
+| **Huldra prep worktree (staging)** | `<HULDRA_HOME>\huldra-hermes-prep` branch `huldra-hermes-prep` tip `84a810b0c315ef9d9c81e0b70b79b7617838b79d` | FORK staging (reusable core + Huldra guards/docs) |
+| **Prep home (isolated)** | `<HULDRA_HOME>\huldra-hermes-prep-home\` | Sanitized config only; no real `.env` |
+| **Status mirror** | `<HULDRA_HOME>\.hermes-live\` | Huldra convention already in use |
+| **Results / docs** | `<HULDRA_HOME>\Results\`, `<HULDRA_HOME>\docs\` | Outside code tree (correct) |
 | **Upstream remote** | `https://github.com/NousResearch/hermes-agent.git` | Reference only; local live is **4863 commits behind** origin — do not fast-forward live blindly |
 | **LATCH workspace cwd (baggage)** | `<LEGACY_WORKSPACE>` (+ Drive `<LEGACY_DRIVE_PATH>`) | REMOVE-LATCH — never default for Huldra |
-| **Permanent code home** | `E:\Huldra\ops\hermes\` | **TARGET** — scaffolded empty; not yet populated with classified source |
+| **Permanent code home** | `<HULDRA_HOME>\ops\hermes\` | **TARGET** — scaffolded empty; not yet populated with classified source |
 
 Evidence already recorded in `HULDRA_HERMES_PREP_REPORT.md`, `HULDRA_FORK_AUDIT.md`, `LATCH_BAGGAGE_QUARANTINE.md`.
 
@@ -91,7 +91,7 @@ Full detail: `LATCH_BAGGAGE_QUARANTINE.md` + `HULDRA_FORK_AUDIT.md`.
 
 | Item | Verdict |
 |---|---|
-| `terminal.cwd` → project Latch | REMOVE / rewrite → `E:/Huldra` |
+| `terminal.cwd` → project Latch | REMOVE / rewrite → `<HULDRA_HOME>` |
 | Slack `#latch` / `C0BKT3BEP4H` | REMOVE as Huldra default |
 | smart_policy "Project LATCH / Mighty" | REMOVE / rewrite Huldra + Ansel→Hermes |
 | `profiles/latch` + shun* | QUARANTINE — do not activate |
@@ -109,7 +109,7 @@ Already green in staging:
 
 Add before declaring layout migration complete:
 
-1. **Layout contract tests** — assert forbidden roots (`project Latch`, `#latch`) rejected; allowed roots (`E:/Huldra`, `#huldra`) accepted.
+1. **Layout contract tests** — assert forbidden roots (`project Latch`, `#latch`) rejected; allowed roots (`<HULDRA_HOME>`, `#huldra`) accepted.
 2. **Separation tests** — config/scripts under `ops\hermes\` must not write state into the code tree; state writes target `boards\huldra\` (or documented prep-home until cutover).
 3. **No-regression** — existing routing guards still pass after any path repoint.
 4. **Read-only live invariants** — script checks live HEAD still `3a980a431b…`, live cwd still Latch until cutover, `OBJECTIVE.md` mtime unchanged by Hermes prep tooling.
@@ -120,12 +120,12 @@ Add before declaring layout migration complete:
 Additive only (prep + Huldra disk scaffold):
 
 1. Add `HULDRA_HERMES_LAYOUT.md` (this file) to staging worktree.
-2. Update `HERMES_HULDRA.md` Paths section → permanent home `E:\Huldra\ops\hermes\` + keep staging pointers.
+2. Update `HERMES_HULDRA.md` Paths section → permanent home `<HULDRA_HOME>\ops\hermes\` + keep staging pointers.
 3. Scaffold empty permanent tree:
-   - `E:\Huldra\ops\hermes\{source,config,scripts,tests,docs}\`
-   - `E:\Huldra\ops\hermes\README.md` (instance identity)
+   - `<HULDRA_HOME>\ops\hermes\{source,config,scripts,tests,docs}\`
+   - `<HULDRA_HOME>\ops\hermes\README.md` (instance identity)
    - placeholders explaining **not yet populated** — source remains in `huldra-hermes-prep` until classified migration
-4. Scaffold `E:\Huldra\boards\huldra\` (empty state home; no DB copy).
+4. Scaffold `<HULDRA_HOME>\boards\huldra\` (empty state home; no DB copy).
 5. Commit on `huldra-hermes-prep` only. **No push. No live main changes.**
 
 ## 7) Cutover checklist + rollback
@@ -139,7 +139,7 @@ Additive only (prep + Huldra disk scaffold):
 5. Dual-run / shadow against `#huldra` only; `#latch` still forbidden.
 6. Integrate routing guards into gateway startup.
 7. Swap process only after: tests green, Slack allowlist verified, Ansel reanchor, Chris irreversible-action approval.
-8. Update status writes to continue using `E:\Huldra\.hermes-live\`.
+8. Update status writes to continue using `<HULDRA_HOME>\.hermes-live\`.
 9. Leave live AppData tree intact until rollback window closes.
 
 ### Rollback
