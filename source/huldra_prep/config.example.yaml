@@ -1,0 +1,52 @@
+# Huldra Hermes prep — EXAMPLE config (NO SECRETS)
+# Copy ideas into huldra-hermes-prep-home/config.yaml for isolated experiments.
+# Do NOT point the live gateway at this file.
+
+terminal:
+  backend: local
+  cwd: E:/Huldra
+  timeout: 180
+  persistent_shell: true
+
+# Coordination: Slack #huldra / C0BKR5LEYV8 only for Huldra operator work.
+# Do not default to #latch / C0BKT3BEP4H.
+
+approvals:
+  mode: "off"
+  smart_policy: >
+    Project HULDRA. Chris is often away from chat; escalate only what cannot
+    be undone. Ansel (ChatGPT) sets scientific/product intent; Hermes executes
+    within Huldra boundaries under Chris approval for irreversible actions.
+
+    APPROVE freely: reading under E:/Huldra, analysis scripts, creating NEW
+    files under E:/Huldra/Results, E:/Huldra/docs, E:/Huldra/evidence.
+
+    ESCALATE: money/compute spend, GPU model loads unless Chris authorized,
+    publishing/deploying, rewriting git history, deleting evidence, touching
+    live Hermes HERMES_HOME or Project LATCH trees.
+
+    Quarantine: Project LATCH / Mighty B1 gates and institutional_memory Latch
+    pins are NOT carried forward. Do not route work to <LEGACY_WORKSPACE>
+    or <LEGACY_DRIVE_PATH>.
+
+kanban:
+  dispatch_in_gateway: true
+  dispatch_interval_seconds: 60
+  failure_limit: 2
+
+# Conventions
+# - Results/evidence: E:/Huldra/Results
+# - Docs/objective: E:/Huldra/docs (OBJECTIVE.md is Chris-owned; do not mutate)
+# - Live status mirror: E:/Huldra/.hermes-live
+# - Prep home (isolated): E:/Huldra/huldra-hermes-prep-home
+# - Prep code worktree: E:/Huldra/huldra-hermes-prep
+
+huldra:
+  root: E:/Huldra
+  coordination_channel: "#huldra"
+  coordination_channel_id: C0BKR5LEYV8
+  results_dir: E:/Huldra/Results
+  docs_dir: E:/Huldra/docs
+  live_status_dir: E:/Huldra/.hermes-live
+  authority: "Ansel sets intent; Hermes executes; Chris approves irreversible actions"
+  quarantine_latch: true

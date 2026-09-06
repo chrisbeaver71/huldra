@@ -1,0 +1,53 @@
+﻿# Huldra Hermes V1 -- secret-free product overlay (NO SECRETS)
+# Use with prep-home or a dedicated Huldra HERMES_HOME. Never point live
+# %LOCALAPPDATA%\hermes gateway here without an explicit Chris cutover.
+#
+# Defaults: cwd %HULDRA_HOME%, Slack #huldra / C0BKR5LEYV8,
+# boards/state %HULDRA_HOME%/boards/huldra, status %HULDRA_HOME%/.hermes-live.
+# Do NOT default to Project LATCH, #latch, or profiles/latch.
+# Set $env:HULDRA_HOME before use; paths are relative to that root.
+
+terminal:
+  backend: local
+  cwd: "%HULDRA_HOME%"
+  timeout: 180
+  persistent_shell: true
+
+approvals:
+  mode: "off"
+  smart_policy: >
+    Project HULDRA. Chris is often away from chat; escalate only what cannot
+    be undone. Ansel (ChatGPT) sets scientific/product intent; Hermes executes
+    within Huldra boundaries under Chris approval for irreversible actions.
+
+    APPROVE freely: reading under %HULDRA_HOME%, analysis scripts, creating NEW
+    files under %HULDRA_HOME%/Results, %HULDRA_HOME%/docs, %HULDRA_HOME%/evidence,
+    %HULDRA_HOME%/boards/huldra.
+
+    ESCALATE: money/compute spend, GPU model loads unless Chris authorized,
+    publishing/deploying, rewriting git history, deleting evidence, touching
+    live Hermes HERMES_HOME or Project LATCH trees.
+
+    Quarantine: Project LATCH / Mighty B1 gates and institutional_memory Latch
+    pins are NOT carried forward. Do not route work to <LEGACY_WORKSPACE>
+    or <LEGACY_DRIVE_PATH>. Do not use profiles/latch.
+
+kanban:
+  dispatch_in_gateway: true
+  dispatch_interval_seconds: 60
+  failure_limit: 2
+
+huldra:
+  root: "%HULDRA_HOME%"
+  coordination_channel: "#huldra"
+  coordination_channel_id: C0BKR5LEYV8
+  results_dir: "%HULDRA_HOME%/Results"
+  docs_dir: "%HULDRA_HOME%/docs"
+  boards_dir: "%HULDRA_HOME%/boards/huldra"
+  state_dir: "%HULDRA_HOME%/boards/huldra"
+  live_status_dir: "%HULDRA_HOME%/.hermes-live"
+  ops_dir: "%HULDRA_HOME%/ops/hermes"
+  prep_home: "%HULDRA_HOME%/huldra-hermes-prep-home"
+  prep_source: "%HULDRA_HOME%/huldra-hermes-prep"
+  authority: "Ansel sets intent; Hermes executes; Chris approves irreversible actions"
+  quarantine_latch: true
