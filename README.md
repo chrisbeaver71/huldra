@@ -8,6 +8,7 @@ A self-contained, isolated fork of [Hermes Agent](https://github.com/NousResearc
 
 - **Hermes Agent core**: agent loop, gateway, session primitives, toolsets, kanban dispatch, receipts, recovery, status reporting
 - **Huldra adaptations**: path/channel guards, secret-free config overlays, Windows bootstrap/doctor/smoke, operator docs
+- **Profile-driven architecture**: versioned model catalog with 3 V1 profiles, hardware detection, and automatic recommendation
 - **Permanent code tree**: publication-ready layout under `$env:HULDRA_HOME\ops\hermes`
 
 ## What this is NOT
@@ -55,6 +56,20 @@ Copy-Item config\.env.huldra.example "$env:HULDRA_HOME\huldra-hermes-prep-home\.
 ```
 
 Product defaults: cwd `$env:HULDRA_HOME`, Slack `#huldra` / `C0BKR5LEYV8`, boards `$env:HULDRA_HOME\boards\huldra`, status `$env:HULDRA_HOME\.hermes-live`.
+
+### V1 Profiles
+
+The profile-driven architecture provides three locked model profiles:
+
+| Profile | Model | Quant | Runtime | Min VRAM | Min RAM |
+|---------|-------|-------|---------|----------|---------|
+| `qwen36-35b-apex` | Qwen 3.6 35B-A3B | APEX I-Compact Q4_K_M | ik_llama.cpp | 8 GB | 16 GB |
+| `gemma4-e4b` | Gemma 4 E4B | Google QAT Q4_0 | llama.cpp | 4 GB | 8 GB |
+| `qwen38-27b` | Qwen 3.8 27B | ggml-org Q4_K_M + MTP Q4_0 | llama.cpp (CUDA) | 8 GB | 16 GB |
+
+Hardware detection (`huldra_hardware`) runs at first launch and recommends the best-fit profile. Manual override is available with clear fit/asset error messages. Qwen 3.8 catalog entries are tolerant of the asset handoff completing later but fail closed if the model is not verified installed.
+
+See `source/huldra_profiles.py`, `source/huldra_hardware.py`, `source/huldra_recommender.py`.
 
 ### Upstream installers (optional)
 

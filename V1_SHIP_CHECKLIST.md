@@ -96,3 +96,45 @@ Mark each item complete with a short evidence path or command.
   - Evidence: `tests/test_v1_product.py::TestStateAndMemory`
 - [x] Status tracker tests
   - Evidence: `tests/test_v1_product.py::TestStatusTracker`
+
+## Profile-Driven Architecture
+- [x] Versioned profile catalog with schema validation
+  - Evidence: `source/huldra_profiles.py` — ProfileCatalog, Profile, ArtifactRef
+- [x] Three V1 profiles (Qwen3.6-35B, Gemma 4 E4B, Qwen3.8-27B)
+  - Evidence: `huldra_profiles.py:create_v1_default_catalog()` — 3 profiles
+- [x] Profile artifact declarations (model, runtime, template, hash, license)
+  - Evidence: `huldra_profiles.py:ArtifactRef` — source/revision/hash/license
+- [x] Resource requirements per profile (disk, RAM, VRAM min/recommended)
+  - Evidence: `huldra_profiles.py:ResourceRequirements`
+- [x] Fallback/recovery configuration per profile
+  - Evidence: `huldra_profiles.py:FallbackConfig` — fallback_profiles, retry, auto_download
+- [x] Catalog save/load roundtrip and validation
+  - Evidence: `tests/test_v1_profiles.py::TestProfileCatalog`
+
+## Hardware Detection
+- [x] Deterministic GPU/VRAM detection (nvidia-smi, WMI fallback)
+  - Evidence: `source/huldra_hardware.py` — _detect_gpu_nvidia, _detect_gpu_wmi
+- [x] System RAM detection (WMI, psutil, sysconf fallback)
+  - Evidence: `huldra_hardware.py:_detect_ram()`
+- [x] Storage detection at HULDRA_HOME
+  - Evidence: `huldra_hardware.py:_detect_storage()`
+- [x] Usable resources with reserved headroom (no benchmark inference)
+  - Evidence: `huldra_hardware.py` — SYSTEM_RESERVED_* constants
+- [x] Hardware profile save/load for caching
+  - Evidence: `huldra_hardware.py:save_hardware_profile, load_hardware_profile`
+- [x] Hardware detection tests
+  - Evidence: `tests/test_v1_profiles.py::TestHardwareDetection`
+
+## Recommender
+- [x] Fit derivation from declared requirements + headroom
+  - Evidence: `source/huldra_recommender.py` — check_requirements()
+- [x] Fit levels: FULL, PARTIAL, INSUFFICIENT, UNKNOWN
+  - Evidence: `huldra_recommender.py:FitLevel`
+- [x] Supports ~8 GB VRAM / ~16 GB RAM minimum viable tier
+  - Evidence: `tests/test_v1_profiles.py::test_8gb_vram_16gb_ram_minimal_tier`
+- [x] Manual profile override with clear fit/asset errors
+  - Evidence: `huldra_recommender.py:recommend_profiles(manual_override=...)`
+- [x] Recommendation report formatting
+  - Evidence: `huldra_recommender.py:format_recommendation_report()`
+- [x] Recommender tests (sort, override, margin, all fit levels)
+  - Evidence: `tests/test_v1_profiles.py::TestRecommender`
