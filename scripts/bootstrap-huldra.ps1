@@ -4,7 +4,7 @@
   Bootstrap Huldra Hermes V1 layout for local smoke (never live HERMES_HOME).
 .DESCRIPTION
   Verifies/creates Huldla ops/hermes layout dirs, prep-home, boards/status paths.
-  Does NOT copy secrets, state.db, or touch %LOCALAPPDATA%\hermes.
+  Does NOT copy secrets, state.db, or touch $env:LOCALAPPDATA\hermes.
   Set $env:HULDRA_HOME or pass explicit paths.
 #>
 param(

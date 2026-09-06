@@ -1,4 +1,4 @@
-﻿# Huldra Hermes V1
+# Huldra Hermes V1
 
 A self-contained, isolated fork of [Hermes Agent](https://github.com/NousResearch/hermes-agent) (Nous Research, MIT License) adapted for the Project Huldra operating environment.
 
@@ -32,7 +32,7 @@ $env:HULDRA_HOME\ops\hermes\
 ## Quick start (Windows) -- Huldra product path
 
 ```powershell
-$env:HULDRA_HOME = 'E:\Huldra'   # or wherever you installed
+$env:HULDRA_HOME = '<install-root>'   # e.g. C:\Users\you\Huldra
 Set-Location "$env:HULDRA_HOME\ops\hermes"
 .\scripts\bootstrap-huldra.ps1   # layout + prep-home seed (never live HERMES_HOME)
 .\scripts\huldra-doctor.ps1      # zero-GPU path/config/routing checks

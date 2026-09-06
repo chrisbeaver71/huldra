@@ -1,4 +1,4 @@
-﻿#Requires -Version 5.1
+#Requires -Version 5.1
 <#
 .SYNOPSIS
   One-command Huldra V1 smoke: doctor + routing pytest + layout checks.
@@ -34,7 +34,7 @@ Write-Host "=== smoke-huldra ===" -ForegroundColor White
 Write-Host "Python=$Python"
 
 # 1) doctor
-& "$OpsRoot\scripts\huldra-doctor.ps1" -OpsRoot $OpsRoot -Python $Python
+& "$OpsRoot\scripts\huldra-doctor.ps1" -HuldraHome $HuldraHome -OpsRoot $OpsRoot -Python $Python
 if ($LASTEXITCODE -ne 0) { $fail++; Write-Host 'doctor failed' -ForegroundColor Red } else { Write-Host 'doctor passed' -ForegroundColor Green }
 
 # 2) routing guards via pytest (staging tests; PYTHONPATH=staging)

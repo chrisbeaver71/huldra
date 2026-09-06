@@ -68,4 +68,4 @@ Do NOT delete `$env:HULDRA_HOME\ops\hermes`, `$env:HULDRA_HOME\boards\huldra`, o
 - The Huldra V1 code tree remains available for future attempts
 - The prep fork at `$env:HULDRA_HOME\huldra-hermes-prep` is still on branch `huldra-hermes-prep`
 - The routing guards in `huldra_routing.py` can be re-evaluated
-- No public repository exists yet -- no public rollback needed
+- If a public repository exists, remove the corresponding tag or branch and coordinate with collaborators on the rollback
