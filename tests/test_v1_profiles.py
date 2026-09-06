@@ -410,6 +410,85 @@ class TestOptionalWorkerProfile:
         assert p is not None
         assert p.fallback.fallback_profiles == []
 
+
+# ============================================================================
+# Auxiliary Artifacts / MTP Binding Tests
+# ============================================================================
+
+class TestAuxiliaryArtifacts:
+    """Test auxiliary_artifacts field on Profile for MTP and other secondary artifacts."""
+
+    def test_auxiliary_artifacts_defaults_empty(self):
+        from huldra_profiles import Profile
+        p = Profile(id="x", name="X")
+        assert p.auxiliary_artifacts == []
+
+    def test_qwen38_has_mtp_auxiliary_artifact(self):
+        from huldra_profiles import create_v1_default_catalog
+        catalog = create_v1_default_catalog()
+        p = catalog.get("qwen38-27b")
+        assert p is not None
+        assert len(p.auxiliary_artifacts) == 1
+        mtp = p.auxiliary_artifacts[0]
+        assert mtp.name == "mtp-Qwen3.8-27B-Q4_0.gguf"
+        assert "mtp-Qwen3.8-27B-Q4_0.gguf" in mtp.path
+
+    def test_mtp_artifact_metadata(self):
+        from huldra_profiles import create_v1_default_catalog
+        catalog = create_v1_default_catalog()
+        p = catalog.get("qwen38-27b")
+        mtp = p.auxiliary_artifacts[0]
+        assert mtp.sha256 == "051a1764cff8c4f3ee6ae8b00593a0364c7539c67fa50ffc58f3f96509fca38e"
+        assert mtp.size_bytes == 1680271648
+        assert mtp.license == "Apache-2.0"
+        assert mtp.revision == "0669b98607d47046c7c2b3f801011d54a08cfccf"
+
+    def test_mtp_not_in_other_profiles(self):
+        from huldra_profiles import create_v1_default_catalog
+        catalog = create_v1_default_catalog()
+        for pid in ["qwen36-35b-apex", "gemma4-e4b", "ling30-tiny-worker"]:
+            p = catalog.get(pid)
+            assert p is not None
+            assert p.auxiliary_artifacts == []
+
+    def test_auxiliary_artifacts_roundtrip(self):
+        from huldra_profiles import Profile, ArtifactRef, ProfileCatalog, create_v1_default_catalog
+        original = create_v1_default_catalog()
+        p = original.get("qwen38-27b")
+        d = p.to_dict()
+        assert "auxiliary_artifacts" in d
+        assert len(d["auxiliary_artifacts"]) == 1
+        p2 = Profile.from_dict(d)
+        assert len(p2.auxiliary_artifacts) == 1
+        assert p2.auxiliary_artifacts[0].sha256 == "051a1764cff8c4f3ee6ae8b00593a0364c7539c67fa50ffc58f3f96509fca38e"
+        assert p2.auxiliary_artifacts[0].size_bytes == 1680271648
+
+    def test_catalog_roundtrip_preserves_auxiliary(self):
+        from huldra_profiles import create_v1_default_catalog, ProfileCatalog
+        import tempfile
+        from pathlib import Path
+        original = create_v1_default_catalog()
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "catalog.json"
+            original.save(path)
+            loaded = ProfileCatalog.from_file(path)
+            p = loaded.get("qwen38-27b")
+            assert p is not None
+            assert len(p.auxiliary_artifacts) == 1
+            assert p.auxiliary_artifacts[0].name == "mtp-Qwen3.8-27B-Q4_0.gguf"
+
+    def test_no_auxiliary_artifacts_omitted_from_dict(self):
+        from huldra_profiles import Profile
+        p = Profile(id="x", name="X")
+        d = p.to_dict()
+        assert "auxiliary_artifacts" not in d
+
+    def test_empty_auxiliary_artifacts_omitted_from_dict(self):
+        from huldra_profiles import Profile
+        p = Profile(id="x", name="X", auxiliary_artifacts=[])
+        d = p.to_dict()
+        assert "auxiliary_artifacts" not in d
+
     def test_ling_worker_to_dict_roundtrip(self):
         from huldra_profiles import create_v1_default_catalog
         catalog = create_v1_default_catalog()

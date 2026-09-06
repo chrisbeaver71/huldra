@@ -76,9 +76,24 @@ class ArtifactRef:
         )
 
 
+# System reserves: matching huldra_hardware.py
+# Profile ResourceRequirements stores "usable" values (what the app needs
+# after system reserve).  The manifest (catalog JSON) records "physical-free"
+# values (usable + reserve) so users see actual hardware requirements.
+_SYSTEM_RESERVED_DISK_GB = 5.0
+_SYSTEM_RESERVED_RAM_GB = 2.0
+_SYSTEM_RESERVED_VRAM_GB = 0.5
+
+
 @dataclass
 class ResourceRequirements:
-    """Declared resource requirements for a profile."""
+    """Declared resource requirements for a profile.
+
+    Internal values are "usable" (what the application needs from
+    hardware after system reserve).  When serialised for the manifest
+    (catalog JSON), system reserves are added to produce "physical-free"
+    values matching huldra_hardware.py semantics.
+    """
     min_disk_gb: float = 0.0
     min_ram_gb: float = 0.0
     min_vram_gb: float = 0.0
@@ -86,7 +101,23 @@ class ResourceRequirements:
     recommended_ram_gb: float = 0.0
     recommended_vram_gb: float = 0.0
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self, physical: bool = False) -> dict[str, Any]:
+        """Serialise resource requirements.
+
+        When *physical* is True (for catalog/manifest output), system
+        reserves are added so the values represent physical-free hardware
+        the user needs.  When False (default), usable values are returned
+        for internal/recommender use.
+        """
+        if physical:
+            return {
+                "min_disk_gb": self.min_disk_gb + _SYSTEM_RESERVED_DISK_GB,
+                "min_ram_gb": self.min_ram_gb + _SYSTEM_RESERVED_RAM_GB,
+                "min_vram_gb": self.min_vram_gb + _SYSTEM_RESERVED_VRAM_GB,
+                "recommended_disk_gb": self.recommended_disk_gb + _SYSTEM_RESERVED_DISK_GB,
+                "recommended_ram_gb": self.recommended_ram_gb + _SYSTEM_RESERVED_RAM_GB,
+                "recommended_vram_gb": self.recommended_vram_gb + _SYSTEM_RESERVED_VRAM_GB,
+            }
         return {
             "min_disk_gb": self.min_disk_gb,
             "min_ram_gb": self.min_ram_gb,
@@ -98,13 +129,34 @@ class ResourceRequirements:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ResourceRequirements":
+        """Load resource requirements.
+
+        Accepts both "usable" values (no reserves) and "physical-free"
+        values (reserves included).  When ``resource_units`` is
+        ``"physical"`` (or reserves are detected), the system reserve is
+        subtracted to store usable values internally.
+        """
+        units = data.get("resource_units", "usable")
+        disk = data.get("min_disk_gb", 0.0)
+        ram = data.get("min_ram_gb", 0.0)
+        vram = data.get("min_vram_gb", 0.0)
+        r_disk = data.get("recommended_disk_gb", 0.0)
+        r_ram = data.get("recommended_ram_gb", 0.0)
+        r_vram = data.get("recommended_vram_gb", 0.0)
+        if units == "physical":
+            disk -= _SYSTEM_RESERVED_DISK_GB
+            ram -= _SYSTEM_RESERVED_RAM_GB
+            vram -= _SYSTEM_RESERVED_VRAM_GB
+            r_disk -= _SYSTEM_RESERVED_DISK_GB
+            r_ram -= _SYSTEM_RESERVED_RAM_GB
+            r_vram -= _SYSTEM_RESERVED_VRAM_GB
         return cls(
-            min_disk_gb=data.get("min_disk_gb", 0.0),
-            min_ram_gb=data.get("min_ram_gb", 0.0),
-            min_vram_gb=data.get("min_vram_gb", 0.0),
-            recommended_disk_gb=data.get("recommended_disk_gb", 0.0),
-            recommended_ram_gb=data.get("recommended_ram_gb", 0.0),
-            recommended_vram_gb=data.get("recommended_vram_gb", 0.0),
+            min_disk_gb=max(0.0, disk),
+            min_ram_gb=max(0.0, ram),
+            min_vram_gb=max(0.0, vram),
+            recommended_disk_gb=max(0.0, r_disk),
+            recommended_ram_gb=max(0.0, r_ram),
+            recommended_vram_gb=max(0.0, r_vram),
         )
 
 
@@ -240,7 +292,7 @@ class Profile:
     source: dict = field(default_factory=dict)
     runtime_flags: dict = field(default_factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self, physical: bool = False) -> dict[str, Any]:
         d: dict[str, Any] = {
             "id": self.id,
             "name": self.name,
@@ -253,7 +305,7 @@ class Profile:
             "optional": self.optional,
             "runtime": self.runtime.to_dict(),
             "template": self.template.to_dict(),
-            "resources": self.resources.to_dict(),
+            "resources": self.resources.to_dict(physical=physical),
             "fallback": self.fallback.to_dict(),
         }
         if self.model_artifact:
@@ -367,18 +419,30 @@ class ProfileCatalog:
             return True
         return False
 
-    def to_dict(self) -> dict[str, Any]:
-        return {
+    def to_dict(self, physical: bool = False) -> dict[str, Any]:
+        d: dict[str, Any] = {
             "version": self.version,
-            "profiles": [p.to_dict() for p in self.profiles],
+            "profiles": [p.to_dict(physical=physical) for p in self.profiles],
         }
+        if physical:
+            d["resource_units"] = "physical"
+        return d
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ProfileCatalog":
         catalog = cls(
             version=data.get("version", CATALOG_VERSION),
         )
+        resource_units = data.get("resource_units", "usable")
         for p_data in data.get("profiles", []):
+            # Propagate catalog-level resource_units into each profile's
+            # resources dict so ResourceRequirements.from_dict() knows
+            # whether to subtract system reserves.
+            if resource_units == "physical" and "resources" in p_data:
+                p_data = dict(p_data)
+                res = dict(p_data.get("resources", {}))
+                res["resource_units"] = "physical"
+                p_data["resources"] = res
             try:
                 profile = Profile.from_dict(p_data)
                 catalog.add(profile)
@@ -415,10 +479,14 @@ class ProfileCatalog:
         return catalog
 
     def save(self, path: Path) -> None:
-        """Save the catalog to a JSON file."""
+        """Save the catalog to a JSON file.
+
+        Resource values are written as physical-free (usable + system
+        reserve) matching huldra_hardware.py semantics.
+        """
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(
-            json.dumps(self.to_dict(), indent=2, default=str),
+            json.dumps(self.to_dict(physical=True), indent=2, default=str),
             encoding="utf-8",
         )
         logger.info("Saved profile catalog v%s to %s", self.version, path)
