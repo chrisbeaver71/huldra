@@ -1,4 +1,4 @@
-﻿#Requires -Version 5.1
+#Requires -Version 5.1
 <#
 .SYNOPSIS
   One-command Huldra V1 smoke: doctor + routing pytest + layout checks.
