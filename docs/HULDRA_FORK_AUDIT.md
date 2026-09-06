@@ -2,7 +2,7 @@
 
 Source: local live checkout `<LIVE_HERMES_INSTALL>`
 @ `3a980a431b28633a5b79c462f654dc100dc1c598` (hermes-agent 0.21.0), forked to
-worktree `E:\Huldra\huldra-hermes-prep` on branch `huldra-hermes-prep`.
+worktree `<HULDRA_HOME>\huldra-hermes-prep` on branch `huldra-hermes-prep`.
 
 Upstream NousResearch tree is generic; most LATCH coupling is in **live
 HERMES_HOME overlays/config**, not in upstream package code (many code hits for

@@ -15,6 +15,6 @@ Identified during V1 engineering latch. Implemented what fits without GPU/proces
 
 1. Provision real Slack + LLM secrets into prep-home `.env` (Chris-owned)
 2. Point live gateway HERMES_HOME / cwd at Huldra (cutover auth)
-3. Kanban boards DB init under `E:\Huldra\boards\huldra` with real state (no live state.db copy)
+3. Kanban boards DB init under `<HULDRA_HOME>\boards\huldra` with real state (no live state.db copy)
 4. End-to-end Slack reply in #huldra from Huldra-pointed gateway
 5. Optional: wire `hermes doctor` subcommand to call Huldra routing checks natively

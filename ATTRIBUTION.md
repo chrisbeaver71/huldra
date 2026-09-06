@@ -7,7 +7,7 @@ This product tree is derived from **Hermes Agent** by [Nous Research](https://gi
 - Upstream repository: https://github.com/NousResearch/hermes-agent
 - Upstream license: MIT (see `LICENSE` and `source/LICENSE`)
 - Reference live checkout (do not mutate from product scripts): `%LOCALAPPDATA%\hermes\hermes-agent` @ `3a980a431b` (main)
-- Staging worktree: `E:\Huldra\huldra-hermes-prep` branch `huldra-hermes-prep`
+- Staging worktree: `<HULDRA_HOME>\huldra-hermes-prep` branch `huldra-hermes-prep`
 
 ## Huldra adaptations
 

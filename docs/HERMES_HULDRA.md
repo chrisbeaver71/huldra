@@ -1,20 +1,20 @@
 # HERMES_HULDRA — Operating Stub (prep)
 
 Huldra-native operator contract for the isolated fork at
-`E:\Huldra\huldra-hermes-prep`. This is **not** live.
+`<HULDRA_HOME>\huldra-hermes-prep`. This is **not** live.
 
 ## Identity
 
-- Code worktree: `E:\Huldra\huldra-hermes-prep` (branch `huldra-hermes-prep`)
-- Prep home: `E:\Huldra\huldra-hermes-prep-home` (isolated; no live profiles)
+- Code worktree: `<HULDRA_HOME>\huldra-hermes-prep` (branch `huldra-hermes-prep`)
+- Prep home: `<HULDRA_HOME>\huldra-hermes-prep-home` (isolated; no live profiles)
 - Live Hermes remains at `<LIVE_HERMES_HOME>` — do not mutate it from this stub
 
 ## Paths
 
-- Workspace / cwd: `E:\Huldra`
-- Results / receipts / evidence packages: `E:\Huldra\Results` (and `E:\Huldra\evidence` when used)
-- Docs / objective: `E:\Huldra\docs` — **`OBJECTIVE.md` is Chris-owned; do not mutate**
-- Live status mirror (read/write only under Huldra): `E:\Huldra\.hermes-live`
+- Workspace / cwd: `<HULDRA_HOME>`
+- Results / receipts / evidence packages: `<HULDRA_HOME>\Results` (and `<HULDRA_HOME>\evidence` when used)
+- Docs / objective: `<HULDRA_HOME>\docs` — **`OBJECTIVE.md` is Chris-owned; do not mutate**
+- Live status mirror (read/write only under Huldra): `<HULDRA_HOME>\.hermes-live`
 - Forbidden: `<LEGACY_WORKSPACE>`, `<LEGACY_DRIVE_PATH>`
 
 ## Coordination
@@ -42,9 +42,9 @@ See `LATCH_BAGGAGE_QUARANTINE.md`. No LATCH workspace default.
 
 Permanent code home (scaffold only until classified migration):
 
-- `E:\Huldra\ops\hermes\` — code (`source`, `config`, `scripts`, `tests`, `docs`)
-- `E:\Huldra\boards\huldra\` — kanban/database/state (outside code tree)
-- Status mirror remains `E:\Huldra\.hermes-live\` (preferred over `E:\Huldra.hermes-live`)
+- `<HULDRA_HOME>\ops\hermes\` — code (`source`, `config`, `scripts`, `tests`, `docs`)
+- `<HULDRA_HOME>\boards\huldra\` — kanban/database/state (outside code tree)
+- Status mirror remains `<HULDRA_HOME>\.hermes-live\` (preferred over `<HULDRA_HOME>.hermes-live`)
 
 See `HULDRA_HERMES_LAYOUT.md` for SoT table, migration map, baggage inventory, tests, and cutover/rollback.
 Staging worktree/home above remain valid until that migration is explicitly approved.
